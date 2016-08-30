@@ -12,12 +12,12 @@ It's not uncommon to see npm run-scripts that look like te one below:
 
 Spefically, look at all the `&&` embedded in there. They make creating and debugging these system harder.
 
-To tackle this (and other things, but I never claim impartiality!), multiple build/automation tools have been craated (gulp)[http://gulpjs.com/], (grunt)[http://gruntjs.com/], (brunch)[http://brunch.io/] and that is not even the whole (list)[https://github.com/sindresorhus/awesome-nodejs#build-tools].
+To tackle this (and other things, but I never claim impartiality!), multiple build/automation tools have been craated [gulp](http://gulpjs.com/), [grunt](http://gruntjs.com/), [brunch](http://brunch.io/) and that is not even the whole [list](https://github.com/sindresorhus/awesome-nodejs#build-tools).
 
-However, this is not without (debate)[https://www.google.com/?ion=1&espv=2#q=grunt%20gulp%20or%20npm].
+However, this is not without [debate](https://www.google.com/?ion=1&espv=2#q=grunt%20gulp%20or%20npm).
 
 One persistent source of complexity with using npm as a build tool are the pesky && to chain commands together.
-And that one cannot run multiple commands in parallel. Here's a good (example)[http://stackoverflow.com/questions/30950032/how-can-i-run-multiple-npm-scripts-in-parallel] why.
+And that one cannot run multiple commands in parallel. Here's a good [example](http://stackoverflow.com/questions/30950032/how-can-i-run-multiple-npm-scripts-in-parallel) why.
 
 `npm-run-batch` attempts to solve the problem of composing complex automation for npm-as-a-build-tool. 
 It provides simple semantics, aids clarity and requires almost no extra installed weight.
@@ -75,10 +75,10 @@ in package.json for batching, `"run-batch"` takes precedence over `"npm-run-batc
 That's all there is to it!
 
 # Working Example
-Please see (package.json)[./package.json] for a few working examples. Because we can't install the package within itself, instead of the alias `run-batch`, we use `node ./index.js`. With that caveat, this should work as described.
+Please see [package.json](./package.json) for a few working examples. Because we can't install the package within itself, instead of the alias `run-batch`, we use `node ./index.js`. With that caveat, this should work as described.
 
 - notice the use of cross-env to pass the environment forward.
-- for true cross-platform independence, we highly recommend using (shelljs)[http://documentup.com/shelljs/shelljs]
+- for true cross-platform independence, we highly recommend using [shelljs](http://documentup.com/shelljs/shelljs)
 
 Feedback of all kinds is welcome.
 
