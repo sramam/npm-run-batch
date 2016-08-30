@@ -4,7 +4,7 @@
   "description": "npm run-script helper that allows running a bunch of run-scripts - in series or parallel!",
   "main": "index.js",
   "bin": {
-    "npm-run-batch": "index.js",
+		"npm-run-batch": "index.js",
     "run-batch": "index.js"
   },
   "scripts": {

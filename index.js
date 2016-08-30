@@ -61,13 +61,15 @@ function runNpmParallel(tasks, opts) {
 }
 
 function main(name, opts) {
+	var batch = pkg.hasOwnProperty('run-batch') ? 'run-batch': 'npm-run-batch';
 	if (
-		!pkg.hasOwnProperty('run-batch') ||
-		!pkg['run-batch'].hasOwnProperty(name)
+		!pkg.hasOwnProperty(batch) ||
+		!pkg[batch].hasOwnProperty(name)
 	) {
-		throw new Error('ERROR: ["run-batch"]["' + name + '"] not found in ' + path.join(cwd, 'package.json'));
+		var msg = 'ERROR: [""' + batch +'""]["' + name + '"] not found in ' + path.join(cwd, 'package.json')
+		throw new Error(msg);
 	}
-	return Promise.mapSeries(pkg['run-batch'][name], function(seqEl) {
+	return Promise.mapSeries(pkg[batch][name], function(seqEl) {
 		var type = toString.call(seqEl);
 		switch(type) {
 			case '[object Array]':

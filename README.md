@@ -32,7 +32,9 @@ The module exposes two binary aliases -
     npm-run-batch
     run-batch
 
-These are meant to be invoked from npm-run scripts.
+These are meant to be invoked from npm-run scripts and used for the grouping of batch sequences as
+we shall see next. 
+
 
 In your package.json, define tasks as usual, but they do only one thing.
 The batch operations are the ones that are the meat of your run-script. 
@@ -67,6 +69,8 @@ Once the batch tasks have been tagged (either of the aliases will work),
 			]
     }
 
+Importantly, we allow for both aliases to be used interchangeably. If both aliases are present
+in package.json for batching, `"run-batch"` takes precedence over `"npm-run-batch"`.
 
 That's all there is to it!
 
