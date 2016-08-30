@@ -1,36 +1,33 @@
 {
-  "name": "run-batch",
+  "name": "npm-run-batch",
   "version": "0.0.1",
   "description": "npm run-script helper that allows running a bunch of run-scripts - in series or parallel!",
   "main": "index.js",
+  "bin": {
+    "npm-run-batch": "index.js",
+    "run-batch": "index.js"
+  },
   "scripts": {
+    "test": "mocha",
     "sample:1": "node ./scripts/colored.js -t 1001",
     "sample:2": "node ./scripts/simple.js -t 1002",
     "sample:3": "node ./scripts/simple.js -t 1003",
     "sample:4": "node ./scripts/colored.js -t 5004",
-    "long-100": "node -e \"setTimeout(function() { console.log('long 100') }, 1000)\"",
-    "long-120": "node -e \"setTimeout(function() { console.log('long 120') }, 1000)\"",
-    "long-200": "node -e \"setTimeout(function() { console.log('long-200') }, 1000)\"",
-    "series": "npm run long-100 && npm run long-120 && npm run long-200",
-    "test": "mocha",
-    "trial1": "node ./index.js",
-    "trial2": "node ./index.js",
-    "trial3": "node ./index.js",
-    "trial4": "npm run sample:1",
-    "trial5": "node ./index.js"
+    "sample:err": "node ./scripts/error.js -t 1000",
+		"sample:env": "node ./scripts/env.js",
+    "batch:series": "node ./index.js",
+    "batch:parallel": "node ./index.js",
+    "batch:error": "node ./index.js",
+		"batch:dev": "cross-env RUN_BATCH=dev node ./index.js",
+		"batch:prod": "cross-env RUN_BATCH=prod node ./index.js"
   },
   "run-batch": {
-    "trial1": [
-      "long-100",
-      "long-120",
-      "long-200"
-    ],
-    "trial2": [
+    "batch:series": [
       "sample:1",
       "sample:2",
       "sample:4"
     ],
-    "trial3": [
+    "batch:parallel": [
       "sample:1",
       [
         "sample:2",
@@ -38,9 +35,19 @@
       ],
       "sample:3"
     ],
-    "trial5": [
-      "sample:1"
-    ]
+    "batch:error": [
+      "sample:1",
+      "sample:err",
+      "sample:2"
+    ],
+		"batch:dev": [
+			"sample:env",
+			"sample:1"
+		],
+		"batch:prod": [
+			"sample:env",
+			"sample:1"
+		]
   },
   "repository": {
     "type": "git",
@@ -64,6 +71,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chalk": "^1.1.3",
+    "cross-env": "^2.0.1",
     "mocha": "^3.0.2"
   },
   "dependencies": {
