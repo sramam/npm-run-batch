@@ -33,7 +33,13 @@ var samples = [{
 function compareFiles(f1, f2) {
   var d1 = fs.readFileSync(f1, 'utf-8');
 	var d2 = fs.readFileSync(f2, 'utf-8');
-	return (d1 === d2);
+	var res = (d1 === d2);
+	if (res === false) {
+		console.log(d1);
+		console.log('------');
+		console.log(d2);
+	}
+	return res;
 }
 
 function spawnNpm(cmd) {
