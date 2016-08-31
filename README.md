@@ -16,10 +16,9 @@ To tackle this (and other things, but I never claim impartiality!), multiple bui
 
 However, this is not without [debate](https://www.google.com/?ion=1&espv=2#q=grunt%20gulp%20or%20npm).
 
-One persistent source of complexity with using npm as a build tool are the pesky && to chain commands together.
-And that one cannot run multiple commands in parallel. Here's a good [example](http://stackoverflow.com/questions/30950032/how-can-i-run-multiple-npm-scripts-in-parallel) why.
+However, a persistent source of complexity with using npm as a build tool are the pesky && to chain commands together. Further, one cannot run multiple commands in parallel. Here's a good [example](http://stackoverflow.com/questions/30950032/how-can-i-run-multiple-npm-scripts-in-parallel) why that can be necessary.
 
-`npm-run-batch` attempts to solve the problem of composing complex automation for npm-as-a-build-tool. 
+`npm-run-batch` attempts to solve the problem of composing complex automation flows for npm-as-a-build-tool. 
 It provides simple semantics, aids clarity and requires almost no extra installed weight.
 
 # Installation
@@ -58,15 +57,15 @@ Once the batch tasks have been tagged (either of the aliases will work),
 
 
     "run-batch": {
-			"batch:1": [
-				"task:1",
-        "task:2"
-			],
-			"batch:2": [
+      "batch:1": [
         "task:1",
-        ["task:2", "task:3"], // Parallel tasks
+        "task:2"
+      ],
+      "batch:2": [
+        "task:1",
+        [ "task:2", "task:3" ], // Parallel tasks
         "task:4"
-			]
+      ]
     }
 
 Importantly, we allow for both aliases to be used interchangeably. If both aliases are present
