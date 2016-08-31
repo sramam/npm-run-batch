@@ -3,6 +3,8 @@ var Promise = require('bluebird');
 var fs = require('fs');
 var tmp = require('tmp');
 var expect = require('chai').expect;
+var diff = require('diff');
+var chalk = require('chalk');
 
 // tmp.setGracefulCleanup();
 
@@ -35,9 +37,12 @@ function compareFiles(f1, f2) {
 	var d2 = fs.readFileSync(f2, 'utf-8');
 	var res = (d1 === d2);
 	if (res === false) {
-		console.log(d1);
-		console.log('------');
-		console.log(d2);
+		diff.diffChars(d1, d2)
+			.forEach(function(part) {
+				var color = part.added ? 'green' :
+					part.removed ? 'red' : 'grey';
+				process.stderr.write(chalk[color](part.value)); 
+			});
 	}
 	return res;
 }
@@ -77,17 +82,18 @@ describe('npm-run-batch', function() {
 				.then(function(fname) {
 					// console.log(sample)
 					// console.log(fname)
-					if (sample.expectError) {
+					expect(
+						compareFiles(fname, sample.expectedOutput)
+					).to.be.true;
+					done();
+				}).catch(function(err) {
+					if (sample.expectedError) {
 						expect(function() {
 							compareFiles(fname, sample.expectedOutput);
-						}).to.throw
-					} else {
-					  expect(
-							compareFiles(fname, sample.expectedOutput)
-						).to.be.true;
+						}).to.be.true;
 					}
 					done();
-				}).catch(done);
+				});
 		});
 	});
 });
