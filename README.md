@@ -16,7 +16,7 @@ To tackle this (and other things, but I never claim impartiality!), multiple bui
 
 However, this is not without [debate](https://www.google.com/?ion=1&espv=2#q=grunt%20gulp%20or%20npm).
 
-However, a persistent source of complexity with using npm as a build tool are the pesky && to chain commands together. Further, one cannot run multiple commands in parallel. Here's a good [example](http://stackoverflow.com/questions/30950032/how-can-i-run-multiple-npm-scripts-in-parallel) why that can be necessary.
+A persistent source of complexity with using npm as a build tool are the pesky && to chain commands together. Further, one cannot run multiple commands in parallel. Here's a good [example](http://stackoverflow.com/questions/30950032/how-can-i-run-multiple-npm-scripts-in-parallel) why that can be necessary.
 
 `npm-run-batch` attempts to solve the problem of composing complex automation flows for npm-as-a-build-tool. 
 It provides simple semantics, aids clarity and requires almost no extra installed weight.
