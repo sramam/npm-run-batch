@@ -1,0 +1,15 @@
+
+> npm-run-batch@0.0.1 batch:prod /Users/sramam/github/sramam/npm-run-batch
+> cross-env RUN_BATCH=prod node ./index.js
+
+
+> npm-run-batch@0.0.1 sample:env /Users/sramam/github/sramam/npm-run-batch
+> node ./scripts/env.js
+
+Read from process.env.RUN_BATCH: prod
+
+> npm-run-batch@0.0.1 sample:1 /Users/sramam/github/sramam/npm-run-batch
+> node ./scripts/colored.js -t 1001
+
+Colored: before timeout 1001
+Colored: after timeout 1001

@@ -4,7 +4,7 @@
   "description": "npm run-script helper that allows running a bunch of run-scripts - in series or parallel!",
   "main": "index.js",
   "bin": {
-		"npm-run-batch": "index.js",
+    "npm-run-batch": "index.js",
     "run-batch": "index.js"
   },
   "scripts": {
@@ -12,14 +12,15 @@
     "sample:1": "node ./scripts/colored.js -t 1001",
     "sample:2": "node ./scripts/simple.js -t 1002",
     "sample:3": "node ./scripts/simple.js -t 1003",
-    "sample:4": "node ./scripts/colored.js -t 5004",
-    "sample:err": "node ./scripts/error.js -t 1000",
-		"sample:env": "node ./scripts/env.js",
+    "sample:4": "node ./scripts/colored.js -t 1004",
+    "sample:err": "node ./scripts/error.js",
+    "sample:env": "node ./scripts/env.js",
     "batch:series": "node ./index.js",
     "batch:parallel": "node ./index.js",
     "batch:error": "node ./index.js",
-		"batch:dev": "cross-env RUN_BATCH=dev node ./index.js",
-		"batch:prod": "cross-env RUN_BATCH=prod node ./index.js"
+    "batch:dev": "cross-env RUN_BATCH=dev node ./index.js",
+    "batch:prod": "cross-env RUN_BATCH=prod node ./index.js",
+    "batch:ofbatches": "node ./index.js"
   },
   "run-batch": {
     "batch:series": [
@@ -40,14 +41,18 @@
       "sample:err",
       "sample:2"
     ],
-		"batch:dev": [
-			"sample:env",
-			"sample:1"
-		],
-		"batch:prod": [
-			"sample:env",
-			"sample:1"
-		]
+    "batch:dev": [
+      "sample:env",
+      "sample:1"
+    ],
+    "batch:prod": [
+      "sample:env",
+      "sample:1"
+    ],
+    "batch:ofbatches": [
+      "batch:dev",
+      "batch:prod"
+    ]
   },
   "repository": {
     "type": "git",
@@ -72,7 +77,8 @@
     "chai": "^3.5.0",
     "chalk": "^1.1.3",
     "cross-env": "^2.0.1",
-    "mocha": "^3.0.2"
+    "mocha": "^3.0.2",
+    "tmp": "0.0.28"
   },
   "dependencies": {
     "bluebird": "^3.4.3",

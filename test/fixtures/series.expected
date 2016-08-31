@@ -1,0 +1,22 @@
+
+> npm-run-batch@0.0.1 batch:series /Users/sramam/github/sramam/npm-run-batch
+> node ./index.js
+
+
+> npm-run-batch@0.0.1 sample:1 /Users/sramam/github/sramam/npm-run-batch
+> node ./scripts/colored.js -t 1001
+
+Colored: before timeout 1001
+Colored: after timeout 1001
+
+> npm-run-batch@0.0.1 sample:2 /Users/sramam/github/sramam/npm-run-batch
+> node ./scripts/simple.js -t 1002
+
+Simple: before timeout 1002
+Simple: after timeout 1002
+
+> npm-run-batch@0.0.1 sample:4 /Users/sramam/github/sramam/npm-run-batch
+> node ./scripts/colored.js -t 1004
+
+Colored: before timeout 1004
+Colored: after timeout 1004
