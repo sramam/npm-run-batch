@@ -1,3 +1,5 @@
+[![Build status](https://travis-ci.org/sramam/npm-run-batch.svg)](https://travis-ci.org/sramam/npm-run-batch)
+
 # npm-run-batch
 npm run-script helper that allows running multiple run-scripts in series & parallel
 
