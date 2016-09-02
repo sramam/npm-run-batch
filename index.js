@@ -1,3 +1,5 @@
+#!/usr/local/env node
+
 'use strict';
 
 var path = require('path');
