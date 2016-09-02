@@ -5,14 +5,14 @@ npm run-script helper that allows running multiple run-scripts in series & paral
 
 `npm-run-batch` allows npm to be used as a build tool with a minimum of fuss.
 
-It's not uncommon to see npm run-scripts that look like te one below:
+It's not uncommon to see npm run-scripts that look like this:
 
     "prebuild": "npm run build:clean && npm run test",
     "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p",
     "build:clean": "npm run test:clean && rimraf ./build",
     "build:dll": "node ./internals/scripts/dependencies.js",
 
-Spefically, look at all the `&&` embedded in there. They make creating and debugging these system harder.
+As project complexity grows, these become harder to comprehend and debug. 
 
 To tackle this (and other things, but I never claim impartiality!), multiple build/automation tools have been craated [gulp](http://gulpjs.com/), [grunt](http://gruntjs.com/), [brunch](http://brunch.io/) and that is not even the whole [list](https://github.com/sindresorhus/awesome-nodejs#build-tools).
 
@@ -22,6 +22,30 @@ A persistent source of complexity with using npm as a build tool are the pesky &
 
 `npm-run-batch` attempts to solve the problem of composing complex automation flows for npm-as-a-build-tool. 
 It provides simple semantics, aids clarity and requires almost no extra installed weight.
+
+## Prove it!
+
+    "scripts": {
+      "rimraf": "rimraf ./build",
+      "webpack": "webpack --config internals/webpack/webpack.prod.bable.js --color -p",
+      "build:dll": "node ./internals/scripts/dependencies.js",
+      "test": "mocha",
+
+      "build:clean": "npm-run-batch",
+      "build": "cross-env NODE_ENV=production npm-run-batch"
+    },
+    "run-batch": {
+      "build:clean": [
+        "test:clean",
+        "rimraf"
+      ],
+      "build": [
+        "build:clean",
+        "test",
+        "webpack"
+      ]
+    }
+
 
 # Installation
 
