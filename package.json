@@ -1,6 +1,6 @@
 {
   "name": "npm-run-batch",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "npm run-script helper that allows running a bunch of run-scripts - in series or parallel!",
   "main": "index.js",
   "bin": {
