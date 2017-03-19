@@ -287,6 +287,10 @@ path-is-absolute@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
 
+pkg-ok@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/pkg-ok/-/pkg-ok-1.0.1.tgz#32b3a2326515b346c0e14a177096213548391c07"
+
 pseudomap@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
