@@ -21,7 +21,7 @@
     "run-batch": "index.js"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "pkg-ok && mocha",
     "sample:1": "node ./scripts/colored.js -t 1001",
     "sample:2": "node ./scripts/simple.js -t 1002",
     "sample:3": "node ./scripts/simple.js -t 1003",
@@ -34,9 +34,7 @@
     "batch:dev": "cross-env RUN_BATCH=dev node ./index.js",
     "batch:prod": "cross-env RUN_BATCH=prod node ./index.js",
     "batch:ofbatches": "node ./index.js",
-    "pkg-ok": "pkg-ok",
-    "precommit": "mocha && pkg-ok",
-    "prepush": "mocha && pkg-ok"
+    "pkg-ok": "pkg-ok"
   },
   "run-batch": {
     "batch:series": [
@@ -79,7 +77,6 @@
     "chalk": "^1.1.3",
     "cross-env": "^3.2.4",
     "diff": "^3.0.0",
-    "husky": "^0.13.2",
     "mocha": "^3.0.2",
     "pkg-ok": "^1.0.1",
     "tmp": "0.0.31"

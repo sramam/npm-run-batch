@@ -10,4 +10,6 @@ program
 console.log('before error ' + program.timeout);
 
 throw new Error (chalk.red('Sequence errored out'))
+
+// should never get here...
 console.log(chalk.yellow('after error ' + program.timeout))
