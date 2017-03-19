@@ -1,10 +1,12 @@
 var spawn = require('cross-spawn');
 var Promise = require('bluebird');
 var fs = require('fs');
+var path = require('path');
 var tmp = require('tmp');
 var expect = require('chai').expect;
 var diff = require('diff');
 var chalk = require('chalk');
+var pkg = require('../../package.json');
 
 // tmp.setGracefulCleanup();
 
@@ -32,16 +34,27 @@ var samples = [{
 }];
 
 
+function adjustFixture(fixture) {
+  // fixes paths & versions in fixtures, to match current run
+  var fixturePath = '/Users/sramam/github/sramam/npm-run-batch';
+  var currentPath = path.resolve(__dirname, '..', '..');
+  return fixture
+    .split('\n')
+    .replace(fixturePath, currentPath)
+    .replace('npm-run-batch@0.0.1', 'npm-run-batch@' + pkg.version)
+    .join('\n');
+}
+
 function compareFiles(f1, f2) {
-  var d1 = fs.readFileSync(f1, 'utf-8');
-	var d2 = fs.readFileSync(f2, 'utf-8');
-	var res = (d1 === d2);
+  var d1 = adjustFixture(fs.readFileSync(f1, 'utf-8'));
+	var d2 = adjustFixture(fs.readFileSync(f2, 'utf-8'));
+  var res = (d1 === d2);
 	if (res === false) {
 		diff.diffChars(d1, d2)
 			.forEach(function(part) {
 				var color = part.added ? 'green' :
 					part.removed ? 'red' : 'grey';
-				process.stderr.write(chalk[color](part.value)); 
+				process.stderr.write(chalk[color](part.value));
 			});
 	}
 	return res;
