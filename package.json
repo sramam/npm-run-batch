@@ -1,7 +1,20 @@
 {
   "name": "npm-run-batch",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "npm run-script helper that allows running a bunch of run-scripts - in series or parallel!",
+  "keywords": [
+    "npm",
+    "run",
+    "script",
+    "scripts",
+    "sequence",
+    "series",
+    "parallel"
+  ],
+  "author": "Shishir Ramam",
+  "repository": "sramam/npm-run-batch",
+  "license": "Apache-2.0",
+  "private": false,
   "main": "index.js",
   "bin": {
     "npm-run-batch": "index.js",
@@ -20,7 +33,10 @@
     "batch:error": "node ./index.js",
     "batch:dev": "cross-env RUN_BATCH=dev node ./index.js",
     "batch:prod": "cross-env RUN_BATCH=prod node ./index.js",
-    "batch:ofbatches": "node ./index.js"
+    "batch:ofbatches": "node ./index.js",
+    "pkg-ok": "pkg-ok",
+    "precommit": "mocha && pkg-ok",
+    "prepush": "mocha && pkg-ok"
   },
   "run-batch": {
     "batch:series": [
@@ -54,21 +70,6 @@
       "batch:prod"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sramam/run-script-sequence.git"
-  },
-  "keywords": [
-    "npm",
-    "run",
-    "script",
-    "scripts",
-    "sequence",
-    "series",
-    "parallel"
-  ],
-  "author": "Shishir Ramam",
-  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/sramam/run-script-sequence/issues"
   },
@@ -76,14 +77,14 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chalk": "^1.1.3",
-    "cross-env": "^2.0.1",
+    "cross-env": "^3.2.4",
     "diff": "^3.0.0",
     "mocha": "^3.0.2",
-    "tmp": "0.0.28"
+    "tmp": "0.0.31"
   },
   "dependencies": {
     "bluebird": "^3.4.3",
     "commander": "^2.9.0",
-    "cross-spawn": "^4.0.0"
+    "cross-spawn": "^5.1.0"
   }
 }

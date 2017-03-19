@@ -1,6 +1,14 @@
-[![Build status](https://travis-ci.org/sramam/npm-run-batch.svg)](https://travis-ci.org/sramam/npm-run-batch)
-
 # npm-run-batch
+<!-- badge -->
+[![npm license](https://img.shields.io/npm/l/npm-run-batch.svg)](https://www.npmjs.com/package/npm-run-batch)
+[![travis status](https://img.shields.io/travis/sramam/npm-run-batch.svg)](https://travis-ci.org/sramam/npm-run-batch)
+[![Build status](https://ci.appveyor.com/api/projects/status/27wui22qfpp13kaq?svg=true)](https://ci.appveyor.com/project/sramam/npm-run-batch-ken4s)
+[![David](https://david-dm.org/sramam/npm-run-batch/status.svg)](https://david-dm.org/sramam/npm-run-batch)
+[![David](https://david-dm.org/sramam/npm-run-batch/dev-status.svg)](https://david-dm.org/sramam/npm-run-batch?type=dev)
+<br/>
+[![NPM](https://nodei.co/npm/npm-run-batch.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/npm-run-batch/)
+<!-- endbadge -->
+
 npm run-script helper that allows running multiple run-scripts in series & parallel
 
 `npm-run-batch` allows npm to be used as a build tool with a minimum of fuss.
@@ -12,7 +20,7 @@ It's not uncommon to see npm run-scripts that look like this:
     "build:clean": "npm run test:clean && rimraf ./build",
     "build:dll": "node ./internals/scripts/dependencies.js",
 
-As project complexity grows, these become harder to comprehend and debug. 
+As project complexity grows, these become harder to comprehend and debug.
 
 To tackle this (and other things, but I never claim impartiality!), multiple build/automation tools have been craated [gulp](http://gulpjs.com/), [grunt](http://gruntjs.com/), [brunch](http://brunch.io/) and that is not even the whole [list](https://github.com/sindresorhus/awesome-nodejs#build-tools).
 
@@ -20,49 +28,50 @@ However, this is not without [debate](https://www.google.com/?ion=1&espv=2#q=gru
 
 A persistent source of complexity with using npm as a build tool are the pesky && to chain commands together. Further, one cannot run multiple commands in parallel. Here's a good [example](http://stackoverflow.com/questions/30950032/how-can-i-run-multiple-npm-scripts-in-parallel) why that can be necessary.
 
-`npm-run-batch` attempts to solve the problem of composing complex automation flows for npm-as-a-build-tool. 
+`npm-run-batch` attempts to solve the problem of composing complex automation flows for npm-as-a-build-tool.
 It provides simple semantics, aids clarity and requires almost no extra installed weight.
 
 ## Prove it!
 
-    "scripts": {
-      "rimraf": "rimraf ./build",
-      "webpack": "webpack --config internals/webpack/webpack.prod.bable.js --color -p",
-      "build:dll": "node ./internals/scripts/dependencies.js",
-      "test": "mocha",
+```
+"scripts": {
+  "rimraf": "rimraf ./build",
+  "webpack": "webpack --config internals/webpack/webpack.prod.bable.js --color -p",
+  "build:dll": "node ./internals/scripts/dependencies.js",
+  "test": "mocha",
 
-      "build:clean": "npm-run-batch",
-      "build": "cross-env NODE_ENV=production npm-run-batch"
-    },
-    "run-batch": {
-      "build:clean": [
-        "test:clean",
-        "rimraf"
-      ],
-      "build": [
-        "build:clean",
-        "test",
-        "webpack"
-      ]
-    }
-
+  "build:clean": "npm-run-batch",
+  "build": "cross-env NODE_ENV=production npm-run-batch"
+},
+"run-batch": {
+  "build:clean": [
+    "test:clean",
+    "rimraf"
+  ],
+  "build": [
+    "build:clean",
+    "test",
+    "webpack"
+  ]
+}
+```
 
 # Installation
 
     npm install npm-run-batch
 
 # Usage
-The module exposes two binary aliases - 
+The module exposes two binary aliases -
 
     npm-run-batch
     run-batch
 
 These are meant to be invoked from npm-run scripts and used for the grouping of batch sequences as
-we shall see next. 
+we shall see next.
 
 
 In your package.json, define tasks as usual, but they do only one thing.
-The batch operations are the ones that are the meat of your run-script. 
+The batch operations are the ones that are the meat of your run-script.
 
 
     "scripts": {
