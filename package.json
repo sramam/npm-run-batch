@@ -79,7 +79,9 @@
     "chalk": "^1.1.3",
     "cross-env": "^3.2.4",
     "diff": "^3.0.0",
+    "husky": "^0.13.2",
     "mocha": "^3.0.2",
+    "pkg-ok": "^1.0.1",
     "tmp": "0.0.31"
   },
   "dependencies": {
