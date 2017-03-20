@@ -109,6 +109,7 @@ function spawnNpm(cmd) {
       }
     });
     child.once('error', function (err) {
+      console.log('!!!!!!!!!!!!!!!!!! ' + err.message);
       reject(err, outFile.name);
     });
   })
