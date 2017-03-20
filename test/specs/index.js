@@ -125,6 +125,7 @@ describe('npm-run-batch', function () {
           ).to.be.true;
           done();
         }).catch(function (err) {
+          console.log('>>>>>>>>> error log ' + err);
           done(err);
         });
     });
