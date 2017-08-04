@@ -47,14 +47,14 @@ var _spawn = function(task, cmd, args, opts) {
 }
 
 function runNpmTask(task, opts) {
-	var npm = (process.platform === "win32" ? "npm.cmd" : "npm");
+	// var npm = (process.platform === "win32" ? "npm.cmd" : "npm");
 	var args = ['run-script', task];
-	return _spawn(task, npm, args, opts);
+	return _spawn(task, 'npm', args, opts);
 }
 
 function runNpmParallel(tasks, opts) {
 	var promises = Promise.map(
-		tasks, 
+		tasks,
 		function(task) {
 			return runNpmTask(task, opts)
 		}
