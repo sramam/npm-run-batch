@@ -34,7 +34,9 @@ var samples = [{
 }];
 
 function keepLine(line) {
-  return !line.match(/(.*npm ERR!)|(.*at )/);
+  // This gets hackier and hackier to test. We are removing lines
+  // that either change by run/env or npm/node version.
+  return !line.match(/(.*npm ERR!)|(.*at )|(Unhandled rejection Error.*)/);
 }
 
 function adjustFixture(fixture) {
@@ -90,6 +92,9 @@ function compareFiles(actualOutput, expectedOutput) {
   expected = remapErrorLogFile(expected).trim();
   var res = (actual === expected);
   if (res === false) {
+    console.log('--------');
+    console.log(diff.diffChars(actual, expected));
+    console.log('--------');
     // If the comparison fails, log diff to stderr.
     diff.diffChars(actual, expected)
       .forEach(function (part) {
