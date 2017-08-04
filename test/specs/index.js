@@ -95,6 +95,8 @@ function compareFiles(actualOutput, expectedOutput) {
     console.log('--------');
     console.log(diff.diffChars(actual, expected));
     console.log('--------');
+    console.log(`\n:::actual:::\n${actual}\n`);
+    console.log(`\n:::expected:::\n${expected}\n`);
     // If the comparison fails, log diff to stderr.
     diff.diffChars(actual, expected)
       .forEach(function (part) {
