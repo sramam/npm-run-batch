@@ -33,6 +33,9 @@ var samples = [{
   expectError: true
 }];
 
+function keepLine(line) {
+  return !line.match(/(.*npm ERR!)|(.*at )/);
+}
 
 function adjustFixture(fixture) {
   // fixes paths & versions in fixtures, to match current run
@@ -40,11 +43,28 @@ function adjustFixture(fixture) {
   var currentPath = path.resolve(__dirname, '..', '..');
   return fixture
     .split('\n')
-    .map(function (line) {
-      return line
-        .replace(fixturePath, currentPath)
-        .replace('npm-run-batch@0.0.1', 'npm-run-batch@' + pkg.version);
-    })
+    .reduce(function (_, line) {
+      if (keepLine(line)) {
+        _.push(
+          line
+          .replace(fixturePath, currentPath)
+          .replace('npm-run-batch@0.0.1', 'npm-run-batch@' + pkg.version)
+        );
+      }
+      return _;
+    }, [])
+    .join('\n');
+}
+
+function adjustOutputStackTrace(output) {
+  return output
+    .split('\n')
+    .reduce(function (_, line) {
+      if (keepLine(line)) {
+        _.push(line);
+      }
+      return _;
+    }, [])
     .join('\n');
 }
 
@@ -61,17 +81,17 @@ function remapErrorLogFile(str) {
     .join('\n')
 }
 
-function compareFiles(f1, f2) {
+function compareFiles(actualOutput, expectedOutput) {
   var errorFile = /\/.npm\/_logs\/.*-debug.log/;
-  var d1 = fs.readFileSync(f1, 'utf-8');
-  var d2 = adjustFixture(fs.readFileSync(f2, 'utf-8'));
+  var actual = adjustOutputStackTrace(fs.readFileSync(actualOutput, 'utf-8'));
+  var expected = adjustFixture(fs.readFileSync(expectedOutput, 'utf-8'));
 
-  d1 = remapErrorLogFile(d1).trim();
-  d2 = remapErrorLogFile(d2).trim();
-  var res = (d1 === d2);
+  actual = remapErrorLogFile(actual).trim();
+  expected = remapErrorLogFile(expected).trim();
+  var res = (actual === expected);
   if (res === false) {
     // If the comparison fails, log diff to stderr.
-    diff.diffChars(d1, d2)
+    diff.diffChars(actual, expected)
       .forEach(function (part) {
         var color = part.added ? 'green' :
           part.removed ? 'red' : 'grey';
@@ -80,8 +100,8 @@ function compareFiles(f1, f2) {
     process.stderr.write('\n');
     // useful for a quick comparison when things fail
     // these files are .gitignored.
-    fs.writeFileSync('./j1', d1, 'utf8');
-    fs.writeFileSync('./j2', d2, 'utf8');
+    fs.writeFileSync('./j1', actual, 'utf8');
+    fs.writeFileSync('./j2', expected, 'utf8');
   }
   return res;
 }

@@ -1,15 +1,15 @@
 
-> npm-run-batch@0.0.5 batch:error /Users/sramam/github/sramam/npm-run-batch
+> npm-run-batch@0.0.1 batch:error /Users/sramam/github/sramam/npm-run-batch
 > node ./index.js
 
 
-> npm-run-batch@0.0.5 sample:1 /Users/sramam/github/sramam/npm-run-batch
+> npm-run-batch@0.0.1 sample:1 /Users/sramam/github/sramam/npm-run-batch
 > node ./scripts/colored.js -t 1001
 
 Colored: before timeout 1001
 Colored: after timeout 1001
 
-> npm-run-batch@0.0.5 sample:err /Users/sramam/github/sramam/npm-run-batch
+> npm-run-batch@0.0.1 sample:err /Users/sramam/github/sramam/npm-run-batch
 > node ./scripts/error.js
 
 before error 1000
@@ -30,10 +30,10 @@ Error: Sequence errored out
     at bootstrap_node.js:537:3
 npm ERR! code ELIFECYCLE
 npm ERR! errno 1
-npm ERR! npm-run-batch@0.0.5 sample:err: `node ./scripts/error.js`
+npm ERR! npm-run-batch@0.0.1 sample:err: `node ./scripts/error.js`
 npm ERR! Exit status 1
 npm ERR!
-npm ERR! Failed at the npm-run-batch@0.0.5 sample:err script 'node ./scripts/error.js'.
+npm ERR! Failed at the npm-run-batch@0.0.1 sample:err script 'node ./scripts/error.js'.
 npm ERR! Make sure you have the latest version of node.js and npm installed.
 npm ERR! If you do, this is most likely a problem with the npm-run-batch package,
 npm ERR! not with npm itself.
