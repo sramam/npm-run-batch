@@ -50,19 +50,21 @@ function fwdSlashPaths(line) {
   return line.replace(/\\/g, '/').replace(currentPath, fixturePath);
 }
 
+function adjustPkgVersion(line) {
+  // The recordings are made against a version, but the npm version keeps morphing.
+  // To prevent having to keep modifying the recordings in the fixture, a manual
+  // process, we keep the recordings at version 0.0.1 and automate the conversion
+  // here.
+  return line.replace('npm-run-batch@0.0.1', 'npm-run-batch@' + pkg.version);
+}
+
 function adjustFixture(fixture) {
   // fixes paths & versions in fixtures, to match current run
-  var fixturePath = '/Users/sramam/github/sramam/npm-run-batch';
-  var currentPath = path.resolve(__dirname, '..', '..');
   return fixture
     .split('\n')
     .reduce(function (_, line) {
       if (keepLine(line)) {
-        _.push(
-          line
-          .replace(fixturePath, currentPath)
-          .replace('npm-run-batch@0.0.1', 'npm-run-batch@' + pkg.version)
-        );
+        _.push(adjustPkgVersion(line));
       }
       return _;
     }, [])
@@ -96,11 +98,17 @@ function remapErrorLogFile(str) {
 
 function compareFiles(actualOutput, expectedOutput) {
   var errorFile = /\/.npm\/_logs\/.*-debug.log/;
-  var actual = adjustOutputStackTrace(fs.readFileSync(actualOutput, 'utf-8'));
-  var expected = adjustFixture(fs.readFileSync(expectedOutput, 'utf-8'));
+  var actual = remapErrorLogFile(
+    adjustOutputStackTrace(
+      fs.readFileSync(actualOutput, 'utf-8')
+    )
+  ).trim();
+  var expected = remapErrorLogFile(
+    adjustFixture(
+      fs.readFileSync(expectedOutput, 'utf-8')
+    )
+  ).trim();
 
-  actual = remapErrorLogFile(actual).trim();
-  expected = remapErrorLogFile(expected).trim();
   var res = (actual === expected);
   if (res === false) {
     console.log('--------');
