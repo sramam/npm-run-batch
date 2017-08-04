@@ -39,6 +39,17 @@ function keepLine(line) {
   return !line.match(/(.*npm ERR!)|(.*at )|(Unhandled rejection Error.*)/);
 }
 
+function fwdSlashPaths(line) {
+  // the fixture paths are recorded on a developer machine.
+  // There are two reasons for variations -
+  // 1. CI systems use different paths.
+  // 2. Windows and *nix use different path conventions.
+  //
+  var fixturePath = '/Users/sramam/github/sramam/npm-run-batch';
+  var currentPath = path.resolve(__dirname, '..', '..').replace(/\\/g, '/');
+  return line.replace(/\\/g, '/').replace(currentPath, fixturePath);
+}
+
 function adjustFixture(fixture) {
   // fixes paths & versions in fixtures, to match current run
   var fixturePath = '/Users/sramam/github/sramam/npm-run-batch';
@@ -63,7 +74,7 @@ function adjustOutputStackTrace(output) {
     .split('\n')
     .reduce(function (_, line) {
       if (keepLine(line)) {
-        _.push(line);
+        _.push(fwdSlashPaths(line));
       }
       return _;
     }, [])
@@ -95,8 +106,8 @@ function compareFiles(actualOutput, expectedOutput) {
     console.log('--------');
     console.log(diff.diffChars(actual, expected));
     console.log('--------');
-    console.log(`\n:::actual:::\n${actual}\n`);
-    console.log(`\n:::expected:::\n${expected}\n`);
+    console.log(`\n:::actual:::\n${actual}\n----`);
+    console.log(`\n:::expected:::\n${expected}\n----`);
     // If the comparison fails, log diff to stderr.
     diff.diffChars(actual, expected)
       .forEach(function (part) {
