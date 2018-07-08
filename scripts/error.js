@@ -8,7 +8,7 @@ program
 
 // console.log(process.env)
 console.log('before error ' + program.timeout);
-
+process.exit = -1
 throw new Error (chalk.red('Sequence errored out'))
 
 // should never get here...

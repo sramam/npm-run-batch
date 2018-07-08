@@ -2,58 +2,138 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
-var Promise = require('bluebird');
-var spawn = require('cross-spawn');
-var program = require('commander');
+const path = require('path');
+const fs = require('fs');
+const Promise = require('bluebird');
+const spawn = require('cross-spawn');
+const program = require('commander');
+const chalk = require('chalk');
 
-var StringDecoder = require('string_decoder').StringDecoder;
-var decoder = new StringDecoder('utf8');
+const StringDecoder = require('string_decoder').StringDecoder;
+const decoder = new StringDecoder('utf8');
 
 
-var cwd = process.cwd();
+const cache = (() => {
+  function cacheFname() {
+		let pkgDir = __dirname.replace('node_modules/.*', 'node_modules');
+    pkgDir = pkgDir || process.cwd();
+    return path.join(pkgDir, '.npm-run-batch.cache');
+	}
+	
+	function cleanup() {
+		const cacheFile = cacheFname();
+		fs.unlinkSync(cacheFile);
+	}
+
+  function getCache() {
+    const cacheFile = cacheFname();
+    return JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+  }
+
+  function storeError(error) {
+    const cacheFile = cacheFname();
+    let cache = getCache();
+    cache.errors = cache.errors || [];
+    const { message, stack, ...rest}= error;
+    // add current error to tail of error stack.
+    cache.errors.push({ message, stack, ...rest});
+	  fs.writeFileSync(cacheFile, JSON.stringify(cache), 'utf8');
+	}
+	
+
+	let _isRoot = false;
+	function isRoot() {
+		const cacheFile = cacheFname();	
+		try {
+			fs.statSync(cacheFile);
+		} catch(err) {
+			if (err.message.match(/no such file or directory/)) {
+				_isRoot = true;
+				try {
+				  fs.writeFileSync(cacheFile, JSON.stringify({ errors: [] }), 'utf8');
+				} catch (err) {
+          // the cache mechanism is broken here. 
+	  			// force exit the process -
+		  		console.error(`Cannot initialize a cache file for npm-run-batch book-keeping`);
+			  	console.error(err.message);
+				  console.error(`Please fix this before retrying the operation`);
+				  process.exit(1); // exit as quickly as possible.  
+				}
+			}
+		}
+	}
+
+	isRoot();
+
+	return {
+		isRoot: _isRoot,
+		storeError: storeError,
+		getCache: getCache,
+		cleanup: cleanup
+	}
+})();
+
+process.on('unhandledRejection', error => {
+	if(cache.isRoot) {
+    // for root invocation, print message to console
+		const c = cache.getCache();
+		c.errors.forEach(e => {
+			const { message, stack, exitStatus, ...rest } = e;
+			console.log(chalk.red(message));
+			stack.split('\n').forEach(l => console.log(chalk.dim(l)));
+			console.log(chalk.dim(JSON.stringify(...rest, null, 2)));
+			cache.cleanup();
+		})
+	} else {
+		// this is not the root invocation - store error message in cache
+		cache.storeError(error);
+	}
+  process.exitCode = 1;
+});
+
+
+const cwd = process.cwd();
 // package.json of the module we are installed in.
-var pkg = require(path.join(cwd, 'package.json'));
+const pkg = require(path.join(cwd, 'package.json'));
 // package.json of this module.
-var self_pkg = require(path.join(__dirname, 'package.json'));
+const self_pkg = require(path.join(__dirname, 'package.json'));
 
 function makeError(code, cmd, stderr) {
-	var err = new Error('ERROR:' + cmd + ' exited with status code ' + code);
+	const err = new Error('ERROR:' + cmd + ' exited with status code ' + code);
 	err.exitStatus = code;
 	err.stderr = stderr || null;
 	return err;
 };
 
-var _spawn = function(task, cmd, args, opts) {
+const _spawn = function(task, cmd, args, opts) {
 	return new Promise(function(resolve, reject) {
-		var options = {
+		const options = {
 			env: process.env,
 			stdio: 'inherit'
 		};
-		var child = spawn(cmd, args, options);
+		const child = spawn(cmd, args, options);
 		child.once('close', function(code) {
 			if (code === 0) {
 				resolve();
 			} else {
-				var err = makeError(code, [cmd].concat(args), null);
+				const err = makeError(code, [cmd].concat(args), null);
 				reject(err);
 			}
 		});
-		child.once('error', function(err) {
+    child.once('error', function(err) {
 			reject(err);
 		});
 	})
 }
 
 function runNpmTask(task, opts) {
-	// var npm = (process.platform === "win32" ? "npm.cmd" : "npm");
-	var args = ['run-script', task];
+	// const npm = (process.platform === "win32" ? "npm.cmd" : "npm");
+	const args = ['run-script', task];
 	return _spawn(task, 'npm', args, opts);
 }
 
 function runNpmParallel(tasks, opts) {
-	var promises = Promise.map(
+	const promises = Promise.map(
 		tasks,
 		function(task) {
 			return runNpmTask(task, opts)
@@ -63,16 +143,16 @@ function runNpmParallel(tasks, opts) {
 }
 
 function main(name, opts) {
-	var batch = pkg.hasOwnProperty('run-batch') ? 'run-batch': 'npm-run-batch';
+	const batch = pkg.hasOwnProperty('run-batch') ? 'run-batch': 'npm-run-batch';
 	if (
 		!pkg.hasOwnProperty(batch) ||
 		!pkg[batch].hasOwnProperty(name)
 	) {
-		var msg = 'ERROR: [""' + batch +'""]["' + name + '"] not found in ' + path.join(cwd, 'package.json')
+		const msg = 'ERROR: [""' + batch +'""]["' + name + '"] not found in ' + path.join(cwd, 'package.json')
 		throw new Error(msg);
 	}
 	return Promise.mapSeries(pkg[batch][name], function(seqEl) {
-		var type = toString.call(seqEl);
+		const type = toString.call(seqEl);
 		switch(type) {
 			case '[object Array]':
 				return runNpmParallel(
@@ -91,14 +171,14 @@ function main(name, opts) {
 			default:
 				throw new Error('Can only have strings or array of strings');
 		}
-	});
+  })
 }
 
 if (require.main === module) {
 	// invoked via the command line - really, this is invoked via npm
 	// in practice, but equivalent to CLI.
 	// name of invoking npm command
-	var name = process.env.npm_lifecycle_event;
+	const name = process.env.npm_lifecycle_event;
 	program
 		.version(self_pkg.version)
 		.option('-c, --concurrency <n>', 'Maximum number of tasks to execut in parallel.', 'Infinity')
@@ -110,4 +190,3 @@ if (require.main === module) {
 	// module was required.
 	module.exports = main
 }
-

@@ -14,23 +14,25 @@ var pkg = require('../../package.json');
 var samples = [{
   task: "batch:series",
   expectedOutput: "test/fixtures/series.expected",
-  expectError: false
+  expectError: null
 }, {
   task: "batch:ofbatches",
   expectedOutput: "test/fixtures/ofbatches.expected",
-  expectError: false
+  expectError: null
 }, {
   task: "batch:dev",
   expectedOutput: "test/fixtures/dev.expected",
-  expectError: false
+  expectError: null
 }, {
   task: "batch:prod",
   expectedOutput: "test/fixtures/prod.expected",
-  expectError: false
+  expectError: null
 }, {
   task: "batch:error",
   expectedOutput: "test/fixtures/err.expected",
-  expectError: true
+  expectError: [
+    'ERROR:npm,run-script,sample:err exited with status code 1'
+  ]
 }];
 
 function keepLine(line) {
@@ -150,10 +152,13 @@ function spawnNpm(cmd) {
         resolve(outFile.name);
       } else {
         var err = new Error('ERROR: `npm run ' + cmd + '` exited with errorCode ' + code);
+        process.exitCode = 0; // coerce the code back to zero, so the test process can succeed
         reject(err, outFile.name);
       }
     });
     child.once('error', function (err) {
+      expect(process.exitCode, -1);
+      process.exitCode = 0;
       reject(err, outFile.name);
     });
   })
@@ -163,6 +168,7 @@ function spawnNpm(cmd) {
 describe('npm-run-batch', function () {
   samples.forEach(function (sample) {
     it(sample.task, function (done) {
+      // fs.unlinkSync ('./.npm-run-batch.cache')
       spawnNpm(sample.task)
         .then(function (fname) {
           expect(
@@ -170,7 +176,15 @@ describe('npm-run-batch', function () {
           ).to.be.true;
           done();
         }).catch(function (err) {
-          done(err);
+          if (sample.expectError) {
+            const cache = JSON.parse(fs.readFileSync('./.npm-run-batch.cache', 'utf8'));
+            const actual = cache.errors.map(e => e.message);
+            expect(actual).to.deep.equal(sample.expectError);
+            fs.unlinkSync ('./.npm-run-batch.cache');
+            done();
+          } else {
+            dome(err);
+          }
         });
     });
   });
