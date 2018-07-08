@@ -183,7 +183,7 @@ describe('npm-run-batch', function () {
             fs.unlinkSync ('./.npm-run-batch.cache');
             done();
           } else {
-            dome(err);
+            done(err);
           }
         });
     });
