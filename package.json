@@ -20,6 +20,9 @@
     "npm-run-batch": "index.js",
     "run-batch": "index.js"
   },
+	"engines": {
+	  "node" : ">=8.0.0
+	},
   "scripts": {
     "test": "pkg-ok && mocha",
     "sample:1": "node ./scripts/colored.js -t 1001",
