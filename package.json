@@ -20,9 +20,9 @@
     "npm-run-batch": "index.js",
     "run-batch": "index.js"
   },
-	"engines": {
-	  "node" : ">=8.0.0"
-	},
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "scripts": {
     "test": "pkg-ok && mocha",
     "sample:1": "node ./scripts/colored.js -t 1001",
@@ -77,7 +77,6 @@
   "homepage": "https://github.com/sramam/run-script-sequence#readme",
   "devDependencies": {
     "chai": "^4.1.2",
-    "chalk": "^2.4.1",
     "cross-env": "^5.2.0",
     "diff": "^3.5.0",
     "mocha": "^5.2.0",
@@ -86,6 +85,7 @@
   },
   "dependencies": {
     "bluebird": "^3.5.1",
+    "chalk": "^2.4.1",
     "commander": "^2.16.0",
     "cross-spawn": "^6.0.5"
   }
