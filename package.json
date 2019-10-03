@@ -1,6 +1,6 @@
 {
   "name": "npm-run-batch",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "npm run-script helper that allows running a bunch of run-scripts - in series or parallel!",
   "keywords": [
     "npm",
@@ -76,17 +76,17 @@
   },
   "homepage": "https://github.com/sramam/run-script-sequence#readme",
   "devDependencies": {
-    "chai": "^4.1.2",
-    "cross-env": "^5.2.0",
-    "diff": "^3.5.0",
-    "mocha": "^5.2.0",
-    "pkg-ok": "^2.2.0",
-    "tmp": "0.0.33"
+    "chai": "^4.2.0",
+    "cross-env": "^6.0.3",
+    "diff": "^4.0.1",
+    "mocha": "^6.2.1",
+    "pkg-ok": "^2.3.1",
+    "tmp": "^0.1.0"
   },
   "dependencies": {
-    "bluebird": "^3.5.1",
-    "chalk": "^2.4.1",
-    "commander": "^2.16.0",
-    "cross-spawn": "^6.0.5"
+    "bluebird": "^3.7.0",
+    "chalk": "^2.4.2",
+    "commander": "^3.0.2",
+    "cross-spawn": "^7.0.0"
   }
 }
