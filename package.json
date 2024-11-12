@@ -87,6 +87,6 @@
     "bluebird": "^3.7.0",
     "chalk": "^2.4.2",
     "commander": "^3.0.2",
-    "cross-spawn": "^7.0.0"
+    "cross-spawn": "^7.0.5"
   }
 }
